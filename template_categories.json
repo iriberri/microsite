@@ -1,0 +1,52 @@
+﻿{
+    "domain" : "data.transportation.gov",
+    "background_image": "./images/Transportation Background.png",
+    "search_text": "Explore ITS Data",
+    
+    "maxButtonCount": 16,
+
+    "buttons": [
+        {
+            "CategoryName": "Connected Vehicle Message",
+            "imgIcons": "images/icons/connectedVehicleIcon.png",
+            "altText": "car icon",
+			"tags": []
+        }, {
+            "CategoryName": "Application Message",
+            "imgIcons": "images/icons/applicationIcon.png",
+            "altText": "car icon",
+			"tags": []
+        }, {
+            "CategoryName": "Trajectories",
+            "imgIcons": "images/icons/trajectoryIcon.png",
+            "altText": "car icon",
+			"tags": ["highways information", "improvements information", "basic safety message"]
+        }, {
+            "CategoryName": "Field Test",
+            "imgIcons": "images/icons/fieldTestIcon.png",
+            "altText": "car icon",
+			"tags": []
+        }, {
+            "CategoryName": "Sensor Data",
+            "imgIcons": "images/icons/sensorReadingIcon.png",
+            "altText": "car icon",
+			"tags": []
+        }, {
+            "CategoryName": "Research Results",
+            "imgIcons": "images/icons/researchResultsIcon.png",
+            "altText": "car icon",
+			"tags": []
+        }, {
+            "CategoryName": "Connected Equipment",
+            "imgIcons": "images/icons/connectedEquipmentIcon.png",
+            "altText": "car icon",
+			"tags": []
+        },
+        {
+            "CategoryName": "Weather",
+            "imgIcons": "images/icons/weatherIcon.png",
+            "altText": "car icon",
+			"tags": []
+        }
+    ]
+}
