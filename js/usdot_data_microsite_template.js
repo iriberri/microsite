@@ -26,17 +26,21 @@ new Vue({
         datasets: [],
         urls: [],
         images: [],
+        rolloverImages: [],
         srcs: [],
         altTextFDS: [],
         datasetNames: [],
-        datasetDesc: []
+        datasetDesc: [],
+        contact_email: "",
+
+        totalDataCount: 0
     },
 
     // Function runs on page load
     created: function () {
         // Loads the initial static file of NTL Data
         this.addNTL();
-
+        
         // Loads the template data
         this.load_json();
 
@@ -72,10 +76,11 @@ new Vue({
                 self.domain = json.domain;
                 self.background_image = json.background_image;
                 self.search_placeholder = json.search_text;
-
+                self.contact_email = json.contact_email;
                 for (i = 0; i < Math.min(json.maxButtonCount, json.buttons.length) ; i++) {
                     self.buttonlabels[i] = json.buttons[i].CategoryName;
                     self.imgIcons[i] = json.buttons[i].imgIcons;
+                    self.rolloverImages[i] = json.buttons[i].rolloverImages;
                     var tagList = [];
                     if (json.buttons[i].tags.length !== undefined) {
                         for (tagIdx = 0; tagIdx < json.buttons[i].tags.length; tagIdx++) {
@@ -101,25 +106,13 @@ new Vue({
                 async: true
             });
         },
-        // Function for loading the js file instead of json for running without server
-        load_data: function () {
+
+        // Finds the total count of data for header
+        initialSearch: function () {
             var self = this;
-
-            self.domain = ws_data.domain;
-            self.background_image = ws_data.background_image;
-            self.search_placeholder = ws_data.search_text;
-
-            for (i = 0; i < Math.min(ws_data.maxButtonCount, ws_data.buttons.length) ; i++) {
-                this.buttonlabels[i] = ws_data.buttons[i].CategoryName;
-                this.imgIcons[i] = ws_data.buttons[i].imgIcons;
-                this.altTextButtonIcons[i] = ws_data.buttons[i].altText;
-            }
-
-            for (i = 0; i < Math.min(ws_data.maxDatasetCount, ws_data.datasets.length) ; i++) {
-                this.urls[i] = ws_data.datasets[i].url;
-                this.images[i] = ws_data.datasets[i].image;
-                this.altTextFDS[i] = ws_data.datasets[i].altText;
-            }
+            $.get(self.url + '&search_context=' + self.domain, function (data) {
+                self.totalDataCount = data.results.length + self.NTLJson.length;
+            });
         },
 
         // gets the JSON data for a search term and sets it to the "items" variable
@@ -143,8 +136,9 @@ new Vue({
                 self.addSocratatoJson();
                 self.addNTLtoJson(search_query);
                 self.resultsJson.sort(self.compare);
+                $('html,body').animate({ scrollTop: $("#searchresults").offset().top }, 800);
             });
-            this.query = search_query;
+            self.query = search_query;
             this.hideResults = "False";
         },
 
@@ -162,16 +156,17 @@ new Vue({
                     var tagCount;
                     var allTags = [];
                     var RESEARCHRESULTS = "Research Results";
-                    
+
                     allTags[0] = RESEARCHRESULTS;
                     for (tagCount = 0; tagCount < json.datasets[itemCountNTL].tags.length; tagCount++) {
-                        allTags[tagCount+1] = json.datasets[itemCountNTL].tags[tagCount];
+                        allTags[tagCount + 1] = json.datasets[itemCountNTL].tags[tagCount];
                     }
                     tempJson["tags"] = allTags;
                     tempJson["tags"].sort();
                     tempJson["link"] = json.datasets[itemCountNTL].URL;
                     self.NTLJson.push(tempJson);
                 }
+                self.initialSearch();
             });
         },
 
@@ -179,7 +174,7 @@ new Vue({
         addNTLtoJson: function(search_query) {
             var itemCountNTL;
             var self = this;
-            var buttonIdx;
+            var buttonIdx = -1;
             var tempCount;
             // match query to button
             for (tempCount = 0; tempCount < self.buttonlabels.length; tempCount++) {
@@ -192,6 +187,7 @@ new Vue({
                     // Checks if tag matches query
                     if (self.NTLJson[itemCountNTL].tags[tagCount].toLowerCase().search(search_query.toLowerCase()) > -1) {
                         self.resultsJson.push(self.NTLJson[itemCountNTL]);
+                        tagCount = self.NTLJson[itemCountNTL].tags.length;
                     }
                     else {
                         var buttonCount;
@@ -212,7 +208,6 @@ new Vue({
         addSocratatoJson: function() {
             var itemCount;
             var self = this;
-
             for (itemCount = 0; itemCount < self.items.results.length; itemCount++) {
                 var tempJson = {};
                 tempJson["name"] = self.items.results[itemCount].resource.name;
@@ -238,25 +233,27 @@ new Vue({
             var bulmaWrapper = document.createElement("div");
             bulmaWrapper.setAttribute("class", "columns is-multiline");
             bulmaWrapper.setAttribute("id", "bulmaDataset");
-
+            bulmaWrapper.setAttribute("style", "padding: 0 0 15% 0; height: 100%");
+            
             var datasetArea = document.getElementById("categoryArea");
             datasetArea.appendChild(bulmaWrapper);
 
             // Loops through each term/category for buttons in the provided template
             for (i = 0; i < Math.min(10, self.buttonlabels.length) ; i++) {
-                var myBreak = document.createElement("br");
-                var myBreak2 = document.createElement("br");
                 // bulma columns
                 var bulmaCol = document.createElement("div");
-                bulmaCol.setAttribute("id", "bulmaCategories");
-                bulmaCol.setAttribute("class", "column is-one-quarter");
-                bulmaCol.setAttribute("style", "margin: 0px");
+                bulmaCol.setAttribute("class", "bulmaCategories column is-one-quarter");
 
                 var imageHTML = document.createElement("IMG");
                 imageHTML.setAttribute("src", self.imgIcons[i]);
                 imageHTML.setAttribute("alt", self.altTextButtonIcons[i]);
-                imageHTML.setAttribute("style", "width: 50px; height: 50px");
-                imageHTML.setAttribute("align", "left");
+                imageHTML.setAttribute("style", "width: 60%; height: 60%; margin-bottom: 20%;");
+                imageHTML.setAttribute("class", "RegularThumbnail");
+                // Sets all attributes of the image
+                var imageHover = document.createElement("IMG");
+                imageHover.setAttribute("src", self.rolloverImages[i]);
+                imageHover.setAttribute("alt", self.altTextButtonIcons[i]);
+                imageHover.setAttribute("class", "HoverThumbnail");
 
                 var btn = document.createElement("button");
                 btn.setAttribute("class", "topic");
@@ -264,9 +261,11 @@ new Vue({
                 btn.setAttribute("v-on:click", "search(" + "buttonlabels[" + i + "])");
                 btn.style.verticalAlign = "middle";
                 btn.appendChild(imageHTML);
+                btn.appendChild(imageHover);
 
                 var paragraphStyle = document.createElement("p");
                 paragraphStyle.innerHTML = self.buttonlabels[i];
+                paragraphStyle.setAttribute("align", "bottom");
                 btn.appendChild(paragraphStyle);
 
                 var myArea = document.getElementsByClassName("contentArea");
@@ -275,12 +274,6 @@ new Vue({
 
                 if (self.buttonlabels[i] == "") {
                     document.getElementById("bterm" + i).parentElement.removeChild(document.getElementById("bterm" + i));
-                } else {
-                    buttonCount++;
-                    if (buttonCount % 4 == 0 && buttonCount != self.buttonlabels.length) {
-                        myArea[0].appendChild(myBreak);
-                        myArea[0].appendChild(myBreak2);
-                    }
                 }
             }
         },
@@ -298,8 +291,7 @@ new Vue({
             // bulma column list wrapper
             var bulmaWrapper = document.createElement("div");
             bulmaWrapper.setAttribute("class", "columns is-multiline");
-            bulmaWrapper.setAttribute("id", "bulmaDataset");
-
+            bulmaWrapper.setAttribute("id", "bulmaDatasetFDS");
             var datasetArea = document.getElementById("datasetArea");
             datasetArea.appendChild(bulmaWrapper);
             for (i = 0; i < this.urls.length; i++) {
@@ -312,7 +304,7 @@ new Vue({
                 this.srcs[i] = "https://data.transportation.gov/w/" + dataId + "/m7rw-edbr?cur=u0WX7_BAfhk&from=root"
                 var jsonurl = "https://" + this.domain + "/views/" + dataId + ".json";
                 $.get(jsonurl, function (data) {
-                    var datasetArea = document.getElementById("bulmaDataset");
+                    var datasetArea = document.getElementById("bulmaDatasetFDS");
                     var aRefLink = document.createElement("a");
                     var datasetName = document.createElement("p");
                     var imgtoBind = document.createElement("IMG");
@@ -330,26 +322,27 @@ new Vue({
 
                     // bulma columns
                     var bulmaCol = document.getElementById("fds" + indexofSource);
-                    bulmaCol.setAttribute("class", "column is-one-third");
-                    bulmaCol.setAttribute("style", "border-style:ridge; margin: 0px");
+                    bulmaCol.setAttribute("class", "column is-one-fourth");
+                    bulmaCol.setAttribute("style", "background: #FFFFFF; margin: 2% 2% 2% 2%; padding: 0px; ");
 
                     aRefLink.setAttribute("href", self.urls[indexofSource]);
                     // DataSets name is set and stored
                     datasetName.setAttribute("class", "featuredHeading");
                     datasetName.innerHTML = (self.datasetNames[indexofSource] !== "") ? self.datasetNames[indexofSource] : data.name;
-                    aRefLink.appendChild(datasetName);
+                    datasetName.setAttribute("style", "padding-left: 5%")
                     // Sets all attributes of the image
                     imgtoBind.setAttribute("src", self.images[indexofSource]);
                     imgtoBind.setAttribute("alt", self.altTextFDS[indexofSource]);
                     imgtoBind.setAttribute("class", "featuredDataThumbnail");
                     // DataSets description is set and stored
-                    datasetDesc.setAttribute("style", "color: black;");
+                    datasetDesc.setAttribute("style", "color: black; padding-left: 5%; padding-right 5%; text-align: left");
                     datasetDesc.innerHTML = (self.datasetDesc[indexofSource] !== "") ? self.datasetDesc[indexofSource] :
                                             data.description == undefined ? "No Description Available" :
                                             data.description.length > 150 ? data.description.substring(0, 150) + "..." :
                                             data.description;
                     // Html is appended and pieced together
                     aRefLink.appendChild(imgtoBind);
+                    aRefLink.appendChild(datasetName);
                     aRefLink.appendChild(datasetDesc);
                     aRefLink.appendChild(myBreak);
                     bulmaCol.appendChild(aRefLink);
@@ -358,4 +351,15 @@ new Vue({
             }
         }
     }
+});
+
+
+/////////
+// Jquery onclick function for a links
+var $root = $('html, body');
+$('a').click(function () {
+    $root.animate({
+        scrollTop: $($.attr(this, 'href')).offset().top
+    }, 500);
+    return false;
 });
