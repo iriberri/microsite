@@ -81,6 +81,15 @@ p.headingFont{
 
 }
 
+.navbar-fixed {
+    top: 0;
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    background: 
+        rgba(35, 91, 122, 0.8);
+}
+
 
 .navBarLinks{
     color: white;
@@ -233,14 +242,12 @@ button.topic {
 }
 
 .HoverThumbnail {
-    width: 50%;
-    height: 50%;
+    width: 55%;
+    height: 55%;
     display: none;
     margin-bottom: 20%;
     
     transition: all 1s ease-in-out;
-}
-button.topic .HoverThumbnail {
 }
 button.topic:hover .HoverThumbnail {
     display: inline;
@@ -256,10 +263,20 @@ button.topic:hover .RegularThumbnail{
     display: none;
 }
 
-button.topic:hover {
+/*button.topic:hover {
     box-shadow: 5px 5px 10px #d9d9d9;
+    color: #136289;
+}*/
+
+.categoryText{
+    font-weight: bold;
+    vertical-align: bottom;
+    color: #4d4d4d;
 }
 
+.categoryText:hover{
+    color: #136289;
+}
 
 /********SEARCH RESULTS***********/
 
@@ -285,6 +302,14 @@ p.resultsQuery {
   font-size: 15px;
 }
 
+p.resultsCount {
+  /* position and size */
+  margin-right: auto;
+
+  /* text */
+  color: #787878;
+  font-size: 15px;
+}
 p.showFeaturedData {
 
   /* position and size */
@@ -317,7 +342,7 @@ a.resultItemHeader {
   /* text */
   font-size: 17px;
   font-weight: bold;
-  color: #4687D9;
+  color: #136289;
   text-decoration: none;
 
 }
@@ -359,12 +384,12 @@ iframe.featuredDataWidget {
 p.featuredHeading {
 
   /* position and size */
-  margin-bottom: 2%;
+  margin: 7% 7% 2% 7%;
   
   /* text */
   font-size: 17px;
   font-weight: bold;
-  color: #656565;
+  color: #01893c;
   text-align: left;
   text-transform: uppercase;
 
@@ -374,8 +399,7 @@ p.featuredHeading {
 /* thumbnail for Featured Data Sets */
 img.featuredDataThumbnail {
   width: 100%;
-  height: 60%;
-  margin-bottom: 5%;
+  height: 50%;
 }
 
 .hidden {
@@ -391,7 +415,7 @@ img.featuredDataThumbnail {
     background-color: #2E5B7A;
     text-align: center;
     color: white;
-    height: 120px;
+    height: 140px;
 }
 
 #categoryDiv {
@@ -408,6 +432,7 @@ img.featuredDataThumbnail {
 
 .bulmaCategories {
     margin-top: 10px;
+    text-align: center;
     height: auto;
     max-width: 400px;
     /*width: 0%;*/
@@ -421,4 +446,12 @@ img.featuredDataThumbnail {
     display: block;
     left: 48%;
     margin-bottom: -65px;
+}
+
+[id^=fds] {
+    transition: all .2s ease-in-out;
+}
+
+[id^=fds]:hover {
+    transform: scale(1.1);
 }

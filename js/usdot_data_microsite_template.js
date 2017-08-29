@@ -11,7 +11,7 @@ new Vue({
         items: '',
         resultsJson: [],
         NTLJson: [],
-
+        responseSocrata: '',
         // data set topics and search domain
         // modify these values to your preference
         url: 'https://api.us.socrata.com/api/catalog/v1?q=',
@@ -46,6 +46,9 @@ new Vue({
 
         this.create_buttons();
         this.loadFeaturedDatasets();
+
+        // run unit tests
+        //this.UnitTests();
     },
 
     methods: {
@@ -130,8 +133,9 @@ new Vue({
                     }
                 }
             }
-            $.get(self.url + newQ + '&search_context=' + self.domain, function (data) {
+            $.get(self.url + newQ + '&search_context=' + self.domain, function (data, xhr) {
                 self.resultsJson = [];
+                self.responseSocrata = xhr;
                 self.items = data;
                 self.addSocratatoJson();
                 self.addNTLtoJson(search_query);
@@ -171,7 +175,7 @@ new Vue({
         },
 
         // searches ntl files for match based on tag (will be used until NTL becomes API called)
-        addNTLtoJson: function(search_query) {
+        addNTLtoJson: function (search_query) {
             var itemCountNTL;
             var self = this;
             var buttonIdx = -1;
@@ -205,7 +209,7 @@ new Vue({
         },
 
         // adds socrata data together with NTL for one query display
-        addSocratatoJson: function() {
+        addSocratatoJson: function () {
             var itemCount;
             var self = this;
             for (itemCount = 0; itemCount < self.items.results.length; itemCount++) {
@@ -234,9 +238,9 @@ new Vue({
             bulmaWrapper.setAttribute("class", "columns is-multiline");
             bulmaWrapper.setAttribute("id", "bulmaDataset");
             bulmaWrapper.setAttribute("style", "padding: 0 0 15% 0; height: 100%");
-            
-            var datasetArea = document.getElementById("categoryArea");
-            datasetArea.appendChild(bulmaWrapper);
+
+            var buttonArea = document.getElementById("categoryArea");
+            buttonArea.appendChild(bulmaWrapper);
 
             // Loops through each term/category for buttons in the provided template
             for (i = 0; i < Math.min(10, self.buttonlabels.length) ; i++) {
@@ -247,7 +251,7 @@ new Vue({
                 var imageHTML = document.createElement("IMG");
                 imageHTML.setAttribute("src", self.imgIcons[i]);
                 imageHTML.setAttribute("alt", self.altTextButtonIcons[i]);
-                imageHTML.setAttribute("style", "width: 60%; height: 60%; margin-bottom: 20%;");
+                imageHTML.setAttribute("style", "width: 55%; height: 55%; margin-bottom: 20%;");
                 imageHTML.setAttribute("class", "RegularThumbnail");
                 // Sets all attributes of the image
                 var imageHover = document.createElement("IMG");
@@ -260,12 +264,13 @@ new Vue({
                 btn.setAttribute("id", "bterm" + i);
                 btn.setAttribute("v-on:click", "search(" + "buttonlabels[" + i + "])");
                 btn.style.verticalAlign = "middle";
+                btn.setAttribute("style", "padding-bottom: 10px;");
                 btn.appendChild(imageHTML);
                 btn.appendChild(imageHover);
 
                 var paragraphStyle = document.createElement("p");
-                paragraphStyle.innerHTML = self.buttonlabels[i];
-                paragraphStyle.setAttribute("align", "bottom");
+                paragraphStyle.innerHTML = self.buttonlabels[i].toUpperCase();
+                paragraphStyle.setAttribute("class", "categoryText");
                 btn.appendChild(paragraphStyle);
 
                 var myArea = document.getElementsByClassName("contentArea");
@@ -305,6 +310,7 @@ new Vue({
                 var jsonurl = "https://" + this.domain + "/views/" + dataId + ".json";
                 $.get(jsonurl, function (data) {
                     var datasetArea = document.getElementById("bulmaDatasetFDS");
+                    //datasetArea.setAttribute("style", "text-align: center");
                     var aRefLink = document.createElement("a");
                     var datasetName = document.createElement("p");
                     var imgtoBind = document.createElement("IMG");
@@ -322,20 +328,19 @@ new Vue({
 
                     // bulma columns
                     var bulmaCol = document.getElementById("fds" + indexofSource);
-                    bulmaCol.setAttribute("class", "column is-one-fourth");
-                    bulmaCol.setAttribute("style", "background: #FFFFFF; margin: 2% 2% 2% 2%; padding: 0px; ");
+                    bulmaCol.setAttribute("class", "column is-one-quarter");
+                    bulmaCol.setAttribute("style", "background: #FFFFFF; margin: 5% auto; padding: 0;");
 
                     aRefLink.setAttribute("href", self.urls[indexofSource]);
                     // DataSets name is set and stored
                     datasetName.setAttribute("class", "featuredHeading");
                     datasetName.innerHTML = (self.datasetNames[indexofSource] !== "") ? self.datasetNames[indexofSource] : data.name;
-                    datasetName.setAttribute("style", "padding-left: 5%")
                     // Sets all attributes of the image
                     imgtoBind.setAttribute("src", self.images[indexofSource]);
                     imgtoBind.setAttribute("alt", self.altTextFDS[indexofSource]);
                     imgtoBind.setAttribute("class", "featuredDataThumbnail");
                     // DataSets description is set and stored
-                    datasetDesc.setAttribute("style", "color: black; padding-left: 5%; padding-right 5%; text-align: left");
+                    datasetDesc.setAttribute("style", "color: black; margin-left: 7%; margin-right: 7%; text-align: left");
                     datasetDesc.innerHTML = (self.datasetDesc[indexofSource] !== "") ? self.datasetDesc[indexofSource] :
                                             data.description == undefined ? "No Description Available" :
                                             data.description.length > 150 ? data.description.substring(0, 150) + "..." :
@@ -349,6 +354,77 @@ new Vue({
                     self.datasets[indexofSource] = data;
                 });
             }
+        },
+
+
+        /////////////////////////////////
+        ///// Tests
+        UnitTests: function () {
+            var passed = 0;
+            var failed = 0;
+            var self = this;
+            var testSearch = function (searchTerm) {
+                $.ajaxSetup({
+                    async: false
+                });
+                self.search(searchTerm);
+                if (self.query === searchTerm) {
+                    passed++;
+                    console.log("Passed: Search parameters passed successfully.")
+                }
+                // Socrata returned without error (failed if socrata has changed/domain changed)
+                if (self.responseSocrata !== "success") {
+                    failed++;
+                    console.log("Failed: Socrata API call Failed");
+                }
+                else {
+                    passed++;
+                    console.log("Passed: Successful Socrata API call");
+                }
+            }
+
+            var testJSON = function () {
+                $.ajaxSetup({
+                    async: false
+                });
+                var jsonpass = false;
+                $.getJSON("template_categories.json", function (json) {
+                    passed++;
+                    jsonpass = true;
+                    console.log("Passed: template_categories.json is a valid JSON");
+                });
+                if (!jsonpass) {
+                    failed++;
+                    console.log("Failed: template_categories.json a not valid JSON");
+                }
+                ///////
+                jsonpass = false;
+                $.getJSON("template_datasets.json", function (json) {
+                    passed++;
+                    jsonpass = true;
+                    console.log("Passed: template_datasets.json is a valid JSON");
+                });
+                if(!jsonpass){
+                    failed++;
+                    console.log("Failed: template_datasets.json a not valid JSON");
+                }
+                ///////
+                jsonpass = false;
+                $.getJSON("json/NTL.json", function (json) {
+                    passed++;
+                    jsonpass = true;
+                    console.log("Passed: NTL.json is a valid JSON");
+                });
+                if(!jsonpass){
+                    failed++;
+                    console.log("Failed: NTL.json a not valid JSON");
+                }
+            }
+            
+            //Test Calls
+            testJSON();
+            testSearch("hello");
+            console.log(passed + failed + " tests ran. " + passed + " passed. " + failed + " failed.");
         }
     }
 });
@@ -362,4 +438,21 @@ $('a').click(function () {
         scrollTop: $($.attr(this, 'href')).offset().top
     }, 500);
     return false;
+});
+
+$(document).ready(function () {
+    $(window).scroll(function () {
+        //if you hard code, then use console
+        //.log to determine when you want the 
+        //nav bar to stick.  
+        //console.log($(window).scrollTop())
+        if ($(window).scrollTop() > 58) {
+            $('.navigation-bar').addClass('navbar-fixed');
+            $('.TitleText').attr('style', 'padding-top:190px');
+        }
+        if ($(window).scrollTop() < 58) {
+            $('.navigation-bar').removeClass('navbar-fixed');
+            $('.TitleText').attr('style', 'padding-top:100px');
+        }
+    });
 });

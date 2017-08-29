@@ -52,8 +52,8 @@
         },
         {
             "CategoryName": "Weather",
-            "imgIcons": "images/icons/Weather.png",
-			"rolloverImages": "images/icons/Weather_Rollover.png",
+            "imgIcons": "images/icons/Weather_v2.png",
+			"rolloverImages": "images/icons/Weather_Rollover_v2.png",
             "altText": "car icon",
 			"tags": []
         }

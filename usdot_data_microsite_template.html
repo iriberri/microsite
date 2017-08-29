@@ -30,7 +30,7 @@
         <div id="searchHead" class="searchHeader">
             <!--==================Navigation Bar================-->
             <div class="navigation-bar navBarLinks">
-                <a class="headHovers navBarLinks" href="#searchHead">SEARCH HOME</a> <div style="font-size: 15px; padding:3px 5px 7px 7px; display: inline;">|</div>
+                <a class="headHovers navBarLinks" href="#main">SEARCH HOME</a> <div style="font-size: 15px; padding:3px 5px 7px 7px; display: inline;">|</div>
                 <a class="headHovers navBarLinks" href="#CategoryAreaHead">DATA TOPICS</a> <div style="font-size: 15px; padding:3px 7px 3px 7px; display: inline;">|</div>
                 <a class="headHovers navBarLinks" href="#FeaturedDataArea">FEATURED DATA SETS</a>
                 <div style="padding-top: 2px; line-height: 3.75;font-style: italic; font-size: 10px;float: right; width: auto;"> and counting!</div>
@@ -38,7 +38,7 @@
                 <img id="dataseticon" src="images/icons/DataSetIcon.png" alt="icon for data set count" />
             </div>
 
-            <div style="padding-top: 100px;">
+            <div class="TitleText" style="padding-top: 100px;">
                 <p class="searchHeaderText">EXPLORE OUR DATA - Beta Version</p>
                 <h3 style="font-size: 18px; color: white; text-align: center; margin-top: 10px; margin-bottom: 12px;">Department of Transportation ITS JPO Data</h3>
 
@@ -100,7 +100,7 @@
 
                 <div style="display: flex;">
                     <p class="resultsSectionHeading"><b>Number of results:&nbsp;</b><p>
-                    <p class="resultsQuery"><b>{{resultsJson.length}}</b></p><br>
+                    <p class="resultsCount"><b>{{resultsJson.length}}</b></p><br>
                     <p class="showFeaturedData" v-on:click="showFeatured">Return to Main Page &raquo;</p>
                 </div>
 
@@ -141,8 +141,8 @@
         </div>
 
         <div id="footerInfo">
-            <img src="images/footerIcon.PNG" alt="DOT Logo"/>
-            <p>Questions? Contact Us</p>
+            <img src="images/icons/dot_logo.png" style="height: 35px" alt="DOT Logo"/> <div style="display:inline; font-size:50px; font-weight:100">|</div> <div style="display:inline; position:relative;top: -20px; left: 15px">Intelligent Transpotation Systems <div style="position:relative; top: -15px; left: 69px;"> Joint Program Office</div></div>
+            <p style="font-weight: bold;">Questions? Contact Us</p>
             <p>{{contact_email}}</p>
         </div>
     </div>
@@ -153,6 +153,7 @@
 <script src="./js/vue.min.js"></script>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/usdot_data_microsite_template.js"></script>
+<!--<script src="./js/unitTest.js"></script>-->
 <link rel="stylesheet" href="css/bulma.css">
 
 </html>
