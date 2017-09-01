@@ -17,7 +17,7 @@ The microsite template is layed out with three different sections to allow users
 
 ## Getting Started
 
-The microsite is a template where the main file to alter is template_categories.json and template_datasets.json.  This json has a guide to it in the README_TEMPLATE_GUIDE.js which contains a mirror of the current template_categories.json with comments.
+The microsite is a template where the main files to alter is template_categories.json and template_datasets.json.
 
 ### template_categories.json:
 This file contains all the category data and extra data such as domain for searching some background images and search bar placeholder text.  Below is a cut out of what the microsite looks like and the json associated with the screenshot.
@@ -28,12 +28,14 @@ These three fields are what controls the header.
 1. "domain" is what will be searched for datasets.
 2. "background_image" is a chosen background image placed in "/images" will appear behind the search bar.  
 3. "Search Text" is what appears as a placeholder in the search bar.
+4. "contact_email": is the email that will be displayed in the footer of the page.
 
 ```
 {
     "domain" : "data.transportation.gov",
     "background_image": "./images/Transportation Background.png",
-    "search_text": "Explore ITS Data",
+    "search_text": "",
+	"contact_email": "data.itsjpo@dot.gov",
 ```
 
 Category Layout in JSON Format:
@@ -43,32 +45,46 @@ The tags field indicates what other search terms will also be searched along wit
 ```
 "buttons": [
     {
-        "CategoryName": "Connected Vehicle Message",
-        "imgIcons": "images/icons/car.png",
-        "altText": "car icon",
-		"tags": []
-    }, {
-        "CategoryName": "Application Message",
-        "imgIcons": "images/icons/car.png",
-        "altText": "car icon",
-		"tags": []
-    }, {
+            "CategoryName": "Connected Vehicle Message",
+            "imgIcons": "images/icons/CVPCars.png",
+			"rolloverImages": "images/icons/CVPCars_Rollover.png",
+            "altText": "car icon",
+			"tags": []
+        }, {
+            "CategoryName": "Application Message",
+            "imgIcons": "images/icons/AppMessage.png",
+			"rolloverImages": "images/icons/AppMessage_Rollover.png",
+            "altText": "car icon",
+			"tags": []
+        },
+		...
 ```
 
 ### template_datasets.json:
 This file contains all the dataset data.  Below is a cut out of what the microsite looks like and the json associated with the screenshot.
 ![alt text](images/screenshots/DatasetsScreenshot.PNG "Datasets Layout Screenshot")
 Dataset Layout in JSON Format:
+There are five fields for each dataset:
+1. This is the name that will be displayed.  If no name is provided the title of the page that is pulled from the URL will be used.
+2. This is the description of the dataset that will be displayed.  If no description is provided the description of the page that is pulled from the URL will be used.
+3. The URL is where the data will come from.
+4. The image is the image that will be displayed.
+5. This is the alternate text for accessibility.
+
 ```
 "datasets": [
     {
-        "url": "https://data.transportation.gov/Railroads/Rail-related-Injuries-Illnesses-Fatalities/6cse-juc3",
-        "image": "./images/url1.png",
+		"name": "BSM Point Map",
+		"description": "Contains all Basic Safety Messages (BSMs) collected during the Advanced Messaging Concept Development (AMCD) field testing program.",
+        "url": "https://data.transportation.gov/Automobiles/BSM-Point-Map/fgbu-uats",
+        "image": "./images/BSM.PNG",
         "altText": "Rail road car for rail related injuries"
     },
     {
+		"name": "",
+		"description": "",
         "url": "https://data.transportation.gov/Research-and-Statistics/Smart-City-Finalists-Map/gtg7-kcxb",
-        "image": "./images/url2.png",
+        "image": "./images/SmartCity.PNG",
         "altText": "Map of smart city finalists"
     },
 ```
@@ -85,7 +101,7 @@ All the libraries are included in the template and don’t need to be downloaded
 
 ### Installing
 
-1. Clone the repostory
+1. Clone the repository
 
 2. Open and alter the template_categories.json.
 
@@ -96,7 +112,7 @@ All the libraries are included in the template and don’t need to be downloaded
 
 ## Versioning
 
-* **Verison 1.0** -  Inital version of the template 
+* **Version 1.0** -  Initial version of the template 
 
 
 ## License

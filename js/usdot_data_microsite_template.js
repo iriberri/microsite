@@ -1,7 +1,6 @@
-new Vue({
+var myVue = new Vue({
 
     el: '#searchTerms',
-
     data: {
         background_image: '',
         search_placeholder: '',
@@ -74,7 +73,7 @@ new Vue({
                 async: false
             });
             // Extracts all information out of data.json
-            $.getJSON("template_categories.json", function (json) {
+            $.getJSON("/microsite/template_categories.json", function (json) {
                 var i;
                 self.domain = json.domain;
                 self.background_image = json.background_image;
@@ -95,7 +94,7 @@ new Vue({
                 }
             });
             // Extracts all information from datasets.json
-            $.getJSON("template_datasets.json", function (json) {
+            $.getJSON("/microsite/template_datasets.json", function (json) {
                 var i;
                 for (i = 0; i < Math.min(json.maxDatasetCount, json.datasets.length) ; i++) {
                     self.urls[i] = json.datasets[i].url;
@@ -151,7 +150,7 @@ new Vue({
             var itemCountNTL;
             var self = this;
 
-            $.getJSON("json/NTL.json", function (json) {
+            $.getJSON("/microsite/json/NTL.json", function (json) {
                 for (itemCountNTL = 0; itemCountNTL < json.datasets.length; itemCountNTL++) {
                     var tempJson = {};
                     tempJson["name"] = json.datasets[itemCountNTL].title;

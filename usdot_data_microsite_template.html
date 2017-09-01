@@ -5,6 +5,8 @@
     <title>Department of Transportation - Open Data Portal | Department of Transportation - Data Portal</title>
     <link rel="stylesheet" type="text/css" href="css/ITS_JPO.css">
     <link rel="stylesheet" type="text/css" href="css/usdot_data_microsite_template.css">
+    <link rel="stylesheet" href="css/bulma.css">
+
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
 </head>
@@ -16,7 +18,7 @@
         <!--===================DOT HEADER===================-->
 
         <div id="dotTopBanner" style="width: 100%; background: #152350; height: 60px; padding: 5px 0 0 10px">
-            <img src="images/icons/dot_logo.png" style="height: 35px"alt="department of transportation logo">
+            <img src="images/icons/dot_logo.png" style="height: 35px; margin-top: 8px;"alt="department of transportation logo">
             <div id="dotTopLinks" style="line-height: 30px; background: #04214f">
                 <a class="headHovers" href="https://www.transportation.gov/mission/about-us" style="font-size: 11px; width: 70px; background: #04214f">ABOUT DOT&emsp;&nbsp;|</a>
                 <a class="headHovers" href="https://www.transportation.gov/briefingroom" style="font-size: 11px; width: 80px; background: #04214f">&emsp;&nbsp;BRIEFING ROOM&emsp;&nbsp;|</a>
@@ -95,7 +97,7 @@
 
                 <div style="display: flex;">
                     <p class="resultsSectionHeading"><b>SEARCH RESULTS FOR:&nbsp;</b></p>
-                    <p class="resultsQuery"><b>{{query}}</b></p><br>
+                    <p class="resultsQuery"><b id="resultsCount">{{query}}</b></p><br>
                 </div>
 
                 <div style="display: flex;">
@@ -141,7 +143,16 @@
         </div>
 
         <div id="footerInfo">
-            <img src="images/icons/dot_logo.png" style="height: 35px" alt="DOT Logo"/> <div style="display:inline; font-size:50px; font-weight:100">|</div> <div style="display:inline; position:relative;top: -20px; left: 15px">Intelligent Transpotation Systems <div style="position:inherit; top: -15px; left: 69px;"> Joint Program Office</div></div>
+            
+            <div style="display:inline; font-size:50px; font-weight:100; text-align:center">
+                <img src="images/icons/dot_logo.png" style="height: 35px;margin-right: 3px;" alt="DOT Logo" /> 
+                |
+                <img src="images/icons/ITS_JPO.png" style="height: 32px" alt="DOT Logo" /> 
+                <!--<div style="display:inline; position:relative; top: -20px; font-size: 15px; font-weight: normal;">
+                    Intelligent Transpotation Systems
+                    <div style="position:relative; top: -15px; left: 171px; width: 1100px;">Joint Program Office</div>
+                </div>-->
+            </div>
             <p style="font-weight: bold;">Questions? Contact Us</p>
             <p>{{contact_email}}</p>
         </div>
@@ -154,6 +165,5 @@
 <script src="./js/jquery.min.js"></script>
 <script src="./js/usdot_data_microsite_template.js"></script>
 <!--<script src="./js/unitTest.js"></script>-->
-<link rel="stylesheet" href="css/bulma.css">
 
 </html>
