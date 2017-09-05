@@ -1,12 +1,18 @@
 {
-  "name": "travis-ci-demo",
-  "version": "1.0.0",
+  "name": "converter",
+  "version": "0.0.0",
+  "description": "The microsite is a standalone website that has been templated so that small changes can be made in a couple json files to create the desired website look and functionality.",
+  "main": "index.js",
   "scripts": {
-    "test": "npm run mocha /test/test.js"
+    "test": "mocha"
   },
-  "devDependencies": {
-    "chai": "^3.4.0",
-    "jshint": "^2.8.0",
-    "mocha": "^2.5.3"
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "express": "^4.15.4",
+    "mocha": "^3.5.0",
+    "request": "^2.81.0",
+    "selenium-webdriver": "^3.5.0"
   }
 }
