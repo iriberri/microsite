@@ -2,7 +2,7 @@
   "name": "travis-ci-demo",
   "version": "1.0.0",
   "scripts": {
-    "test": "npm run mocha selenium.js"
+    "test": "npm run mocha /test/test.js"
   },
   "devDependencies": {
     "chai": "^3.4.0",
