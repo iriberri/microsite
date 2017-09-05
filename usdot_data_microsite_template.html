@@ -97,7 +97,7 @@
 
                 <div style="display: flex;">
                     <p class="resultsSectionHeading"><b>SEARCH RESULTS FOR:&nbsp;</b></p>
-                    <p class="resultsQuery"><b id="resultsCount">{{query}}</b></p><br>
+                    <p class="resultsQuery"><b id="resultsQuery">{{query}}</b></p><br>
                 </div>
 
                 <div style="display: flex;">
@@ -154,16 +154,18 @@
                 </div>-->
             </div>
             <p style="font-weight: bold;">Questions? Contact Us</p>
-            <p>{{contact_email}}</p>
+            <p id="contactEmail">{{contact_email}}</p>
         </div>
     </div>
 </body>
 
+
+
+
+</html>
 
 <!--IMPORT VUE-->
 <script src="./js/vue.min.js"></script>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/usdot_data_microsite_template.js"></script>
 <!--<script src="./js/unitTest.js"></script>-->
-
-</html>
