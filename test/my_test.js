@@ -7,7 +7,7 @@ var should = chai.should();
 var expect = chai.expect;
 var until = webdriver.until;
 
-var browser = new webdriver.Builder().usingServer().withCapabilities({ 'browserName': 'chrome' }).build();
+var browser;
 
 function logTitle() {
     console.log(browser.findElement(webdriver.By.id('resultsCount')).getText());
@@ -30,11 +30,33 @@ function closeBrowser() {
     browser.quit();
 }
 
-browser.get('http://localhost:51611/microsite/usdot_data_microsite_template.html');
+//browser.get('http://localhost:51611/microsite/usdot_data_microsite_template.html');
 //browser.findElement(webdriver.By.id('mainSearch')).sendKeys('field test');
 //browser.findElement(webdriver.By.className('searchButton')).click();
 //browser.wait(findTutsPlusLink, 2000);
 
+beforeEach(function () {
+    this.timeout(10000);
+    if (process.env.SAUCE_USERNAME != undefined) {
+        browser = new webdriver.Builder()
+        .usingServer('http://' + process.env.SAUCE_USERNAME + ':' + process.env.SAUCE_ACCESS_KEY + '@ondemand.saucelabs.com:80/wd/hub')
+        .withCapabilities({
+            'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+            build: process.env.TRAVIS_BUILD_NUMBER,
+            username: process.env.SAUCE_USERNAME,
+            accessKey: process.env.SAUCE_ACCESS_KEY,
+            browserName: "chrome"
+        }).build();
+    } else {
+        browser = new webdriver.Builder().usingServer().withCapabilities({ 'browserName': 'chrome' }).build()
+    }
+
+    return browser.get("http://localhost:51611/microsite/usdot_data_microsite_template.html");
+});
+
+afterEach(function () {
+    return browser.quit();
+});
 
 test.describe("Test Suite", function () {
     this.timeout(mochaTimeout);

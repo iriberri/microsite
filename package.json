@@ -15,6 +15,7 @@
     "request": "^2.81.0",
     "selenium-webdriver": "^3.5.0",
     "webdriverio": "^4.8.0",
-	"chromedriver": "^2.32.0"
+	"chromedriver": "^2.32.0",
+	"saucelabs": "^1.4.0"
   }
 }
