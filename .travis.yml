@@ -5,4 +5,4 @@ node_js:
 addons:
   sauce_connect:
     - username: tsaitimothy
-	- access_key: 6b811739-9558-47fc-ad31-c9d74ab74f1a
+    - access_key: 6b811739-9558-47fc-ad31-c9d74ab74f1a
